@@ -1,0 +1,17 @@
+{
+  "name": "gen-20-backend",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/codetrainafrica/gen-20-backend.git",
+  "author": "Tony <toneyobaze@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ."
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
