@@ -2,7 +2,7 @@
   "name": "gen-20-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "author": "tony",
   "license": "ISC",
   "scripts": {
