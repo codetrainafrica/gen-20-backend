@@ -1,25 +1,25 @@
-const postsArr = [
-  { name: "Post 1", message: "lorem ipsum" },
-  { name: "Post 2", message: "lorem ipsum" },
-  { name: "Post 3", message: "lorem ipsum" },
-  { name: "Post 4", message: "lorem ipsum" },
-  { name: "Post 5", message: "lorem ipsum" },
-  { name: "Post 6", message: "lorem ipsum" },
-  { name: "Post 7", message: "lorem ipsum" },
-  { name: "Post 8", message: "lorem ipsum" },
-  { name: "Post 9", message: "lorem ipsum" },
-];
+const postModel = require("../models/postModel");
 
-const getPostsController = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(postsArr);
+const getPostsController = async (req, res) => {
+  try {
+    const posts = await postModel.find({ name: "Post 10" });
+    res.send(posts);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const postPostsController = (req, res) => {
-  const newPost = req.body;
-  postsArr.push(newPost);
+const postPostsController = async (req, res) => {
+  try {
+    const newPost = req.body;
 
-  res.send(postsArr);
+    const post = new postModel(newPost);
+    await post.save();
+
+    res.send(post);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { getPostsController, postPostsController };
