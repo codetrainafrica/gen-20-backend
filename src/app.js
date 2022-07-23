@@ -1,8 +1,11 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
 const {
   getUsersController,
   postUsersController,
+  updateUser,
+  deleteUser,
 } = require("./controllers/usersController");
 
 const server = express();
@@ -15,19 +18,23 @@ server.use(
 
 server.get("/users", getUsersController);
 server.post("/users", postUsersController);
+server.put("/users", updateUser);
+server.delete("/users", deleteUser);
 
-// server.get("/login", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../public/login.html"));
-// });
+const connectToDB = async () => {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://tony:ZZJz1YKhGp2eaODU@cluster0.annapyt.mongodb.net/?retryWrites=true&w=majority"
+    );
 
-// server.post("/login", (req, res) => {
-//   const { email, password } = req.body;
-//   res.send({
-//     response: "Login successful",
-//     email,
-//   });
-// });
+    console.log("DB connected successfully");
 
-server.listen(3000, () => {
-  console.log("server running on port 3000");
-});
+    server.listen(3000, () => {
+      console.log("server running on port 3000");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+connectToDB();
