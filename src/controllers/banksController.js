@@ -1,44 +1,57 @@
-//Banks Database
-let banks = [
-  { name: "Fidelity", branch: "Kaneshie", id: 1 },
-  { name: "ADB", branch: "Circle", id: 2 },
-  { name: "ABSA", branch: "Dansoman", id: 3 },
-];
+const banksModel = require("../models/banksModel");
 
-const getBanks = (request, response) => {
-  response.send(banks);
+const getBanks = async (request, response) => {
+  try {
+    const banks = await banksModel.find();
+    response.send(banks);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const addBank = (request, response) => {
-  let newBank = request.body;
-  banks.push(newBank);
+const getSingleBank = async (request, response) => {
+  try {
+    const id = request.params.id;
 
-  response.send({ message: "Bank added", bank: newBank });
+    const bank = await banksModel.findOne({ _id: id });
+    response.send(bank);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const updateBank = (request, response) => {
-  let newBankInfo = request.body;
-  let bankId = request.query.id;
+const addBank = async (request, response) => {
+  try {
+    let bank = request.body;
+    let newBank = new banksModel(bank);
 
-  const updatedBanksArr = banks.map((bank) => {
-    if (bank.id == bankId) return newBankInfo;
-    else return bank;
-  });
-
-  banks = updatedBanksArr;
-
-  response.send(banks);
+    response.send({ message: "Bank added", data: await newBank.save() });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const deleteBank = (request, response) => {
-  let bankId = request.query.id;
+const updateBank = async (request, response) => {
+  try {
+    let newBankInfo = request.body;
+    let bankId = request.query.id;
 
-  const filteredBanks = banks.filter((bank) => {
-    if (bank.id != bankId) return bank;
-  });
-
-  banks = filteredBanks;
-  response.send(banks);
+    await banksModel.findByIdAndUpdate(bankId, newBankInfo);
+    response.send("Bank updated");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = { getBanks, addBank, updateBank, deleteBank };
+const deleteBank = async (request, response) => {
+  try {
+    let bankId = request.query.id;
+    await banksModel.findOneAndDelete(bankId);
+
+    response.send("Bank deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { getBanks, addBank, updateBank, deleteBank, getSingleBank };
